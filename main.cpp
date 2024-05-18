@@ -122,6 +122,8 @@ int main() {
         cerr << "Failed to save the demosaiced image." << endl;
         return -1;
     }
+    
+    //*************RGB->YUV********************//
 
     string outputYUVImagePath = "C:\\Users\\91709\\source\\repos\\OpenCV\\OpenCV\\Utils\\YUV_kodim01.png";
     Mat yuvImage;
@@ -136,7 +138,8 @@ int main() {
         return -1;
     }
 
-
+    //****************Downsampling**************************//
+    
     vector<Mat> yuvChannels;
     split(yuvImage, yuvChannels);
     Mat uComponent = yuvChannels[1];
@@ -169,29 +172,29 @@ int main() {
 
     vector<Mat> kernels_u = { k_u1, k_u2, k_u3, k_u4 };
     vector<float> u_cal, v_cal;
-    //for (int i = 0; i < u_padded.rows; ++i) {
-    //    for (int j = 0; j < u_padded.cols; ++j) {
-    //        for (int I = 0; I < 4; I++)
-    //        {
-    //            float sum_u = 0.0, sum_v = 0.0;
-    //            Mat k = kernels_u[0];
-    //            for (int ki = 0; ki < 3; ++ki) {
-    //                for (int kj = 0; kj < 3; ++kj) {
-    //                    int x = j + kj;
-    //                    int y = i + ki;
-    //                    sum_u += k.at<float>(ki, kj) * u_padded.at<float>(y, x);
-    //                    sum_v += k.at<float>(ki, kj) * v_padded.at<float>(y, x);
-    //                }
-    //            }
-    //            u_cal.push_back(sum_u);
-    //            v_cal.push_back(sum_v);
-    //        }
+    for (int i = 0; i < u_padded.rows; ++i) {
+       for (int j = 0; j < u_padded.cols; ++j) {
+           for (int I = 0; I < 4; I++)
+           {
+               float sum_u = 0.0, sum_v = 0.0;
+               Mat k = kernels_u[0];
+               for (int ki = 0; ki < 3; ++ki) {
+                   for (int kj = 0; kj < 3; ++kj) {
+                       int x = j + kj;
+                       int y = i + ki;
+                       sum_u += k.at<float>(ki, kj) * u_padded.at<float>(y, x);
+                       sum_v += k.at<float>(ki, kj) * v_padded.at<float>(y, x);
+                   }
+               }
+               u_cal.push_back(sum_u);
+               v_cal.push_back(sum_v);
+           }
 
-    //        // Store the result in the output matrix
-    //        //u_convolved.at<float>(i, j) = sum;   
-    //         
-    //    }
-    //}
+           // Store the result in the output matrix
+           //u_convolved.at<float>(i, j) = sum;   
+            
+       }
+    }
      cout << "Good_Morning";
 
 
